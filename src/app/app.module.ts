@@ -19,3 +19,6 @@ import { environment } from '../environments/environment';
   bootstrap: [ AppComponent ]
 })
 export class AppModule {}
+
+// 'maps.googleapis.com/maps/api/js'
+//https://maps.googleapis.com/maps/api/place/details/json?placeid=${googleplacesPlace}&key=${googleplacesToken})
