@@ -7,7 +7,7 @@
 
 
 
-const museums = require('./museums4.json');
+const museums = require('./museums4.json.js');
 
 console.log(museums[0]);
 
