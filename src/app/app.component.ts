@@ -12,7 +12,7 @@ import { MapMarker, MapInfoWindow } from "@angular/google-maps";
     `,
   ],
   template: `
-    <google-map height="400px" width="750px" [center]="center" [zoom]="zoom">
+    <google-map height="700px" width="1200px" [center]="center" [zoom]="zoom">
       <map-marker
         #marker
         *ngFor="let museum of museums"
@@ -54,7 +54,7 @@ export class AppComponent {
       console.log(JSON.stringify(Array.from(this.cities)));
       console.log(museums.length);
       this.museums = museums;
-    }, 3000);
+    }, 1000);
   }
 
   openInfoWindow(marker: MapMarker, museum) {
