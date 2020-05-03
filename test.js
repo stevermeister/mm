@@ -1,4 +1,4 @@
-export const museums = [
+[
   {
     "id": 474,
     "mid": 398,
@@ -9215,4 +9215,4 @@ export const museums = [
     },
     "opentime": "mrt t/m okt 10-18 u; groepen bovendien op afspraak"
   }
-];
+]

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { museums } from './museums5';
+import { MapMarker, MapInfoWindow } from '@angular/google-maps';
 
 @Component({
   selector: 'app-root',
@@ -11,26 +12,29 @@ import { museums } from './museums5';
     `
   ],
   template: `
-    <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
-      <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-      <agm-marker-cluster
-        [imagePath]="'https://googlemaps.github.io/js-marker-clusterer/images/m'">
-        <agm-marker
-          *ngFor="let museum of museums"
-          [latitude]="museum.coordinates[0]"
-          [longitude]="museum.coordinates[1]"
-        ><agm-info-window>{{ museum.name }}</agm-info-window></agm-marker>
-      </agm-marker-cluster>        
-    </agm-map>
+
+  <google-map height="400px"
+              width="750px"
+              [center]="center"
+              [zoom]="zoom">
+    <map-marker #marker
+                *ngFor="let museum of museums"
+                [position]="museum.coordinates"
+                [options]="markerOptions" (mapClick)="openInfoWindow(marker, museum)"></map-marker>
+    <map-info-window>{{infoContent}}</map-info-window>
+  </google-map>
   `
 })
 export class AppComponent {
-  lat: number;
-  lng: number;
-  zoom: number = 16;
+
+  @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow;
+  center;
+  zoom: number = 8;
+  markerOptions = {draggable: false};
   museums = [];
   cityMuseums = {};
   cities = new Set();
+  infoContent = ''
 
   constructor() {
     if (navigator.geolocation) {
@@ -38,8 +42,7 @@ export class AppComponent {
         (position: Position) => {
           if (position) {
             console.log(position);
-            this.lat = position.coords.latitude;
-            this.lng = position.coords.longitude;
+            this.center = {lat: position.coords.latitude, lng: position.coords.longitude};
           }
         },
         (error: PositionError) => console.log(error)
@@ -48,16 +51,16 @@ export class AppComponent {
       alert('Geolocation is not supported by this browser.');
     }
 
-    // museums.forEach(museum => {
-    //   this.cityMuseums[museum.city] = this.cityMuseums[museum.city] || [];
-    //   this.cityMuseums[museum.city].push(museum);
-    //   this.cities.add(museum.city);
-    // });
-
     setTimeout(_ => {
       console.log(JSON.stringify(Array.from(this.cities)));
       console.log(museums.length);
       this.museums = museums;
     }, 3000);
   }
+
+  openInfoWindow(marker: MapMarker, museum) {
+    this.infoContent = museum.name
+    this.infoWindow.open(marker);
+  }
+
 }
